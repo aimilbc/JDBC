@@ -1,0 +1,65 @@
+
+
+/* Table structure for table: WritingGroups */
+CREATE TABLE WritingGroups (
+  GroupName varchar(30) NOT NULL,                               -- Name of writing group
+  HeadWriter varchar(30) NOT NULL,                              -- Name of head writer
+  Subject varchar(20) NOT NULL,                                 -- Subject of the book
+  YearFormed varchar(4) NOT NULL,                               -- Year the group formed
+  CONSTRAINT writingGroup_pk PRIMARY KEY (GroupName)            -- Primary key
+) ;
+
+/* Table structure for table: Publishers */
+CREATE TABLE Publishers (
+  PublisherName varchar(40) NOT NULL,                           -- Name of publisher
+  PublisherAddress varchar(30) NOT NULL,                        -- Address of publisher
+  PublisherEmail varchar(30) NOT NULL,                          -- Publisher's email address
+  PublisherPhone varchar(12) NOT NULL,                          -- Publisher's phone number
+  CONSTRAINT Publishers_pk PRIMARY KEY (PublisherName)          -- Primary key   
+) ;
+
+/* Table structure for table: Books */
+CREATE TABLE Books (
+  GroupName varchar(30) NOT NULL,                               -- Name of writing group for this book
+  PublisherName varchar(40) NOT NULL,                           -- Name of the publisher
+  BookTitle varchar(20) NOT NULL,                               -- Title of the book
+  YearPublished varchar(4) NOT NULL,                            -- Year the book was published
+  NumberPages varchar(5) NOT NULL,                              -- Number of pages in the book
+  CONSTRAINT Books_pk PRIMARY KEY (GroupName,BookTitle),        -- Primary key
+  CONSTRAINT Books_ck UNIQUE (BookTitle,PublisherName),         -- Candidate key
+  --CONSTRAINT employees_idx_2 UNIQUE (officeCode),             
+  CONSTRAINT WritingGroup_Books_1 FOREIGN KEY (GroupName) REFERENCES WritingGroups (GroupName),     -- Foreign key
+  CONSTRAINT Publishers_Books_2 FOREIGN KEY (PublisherName) REFERENCES Publishers (PublisherName)   -- Foreign key
+) ;
+
+
+/* Data for table WritingGroups */
+INSERT INTO WritingGroups (GroupName,HeadWriter,Subject,YearFormed)
+    values  ('Coffee House Writers Group','Christine Marie B.','Community','2020'),
+            ('Rockoff Writing Group','Larry Rockoff','Educational','2000'),
+            ('The Socrates School','Socrates','Philosophy','400'),
+            ('The Junto','Benjamin Franklin','Community','1727'),
+            ('The Factory','Andy Warhol','Art','1962'),
+            ('Stratford-on-Odeon','James Joyce','Short story','1920');
+
+/* Data for table Publishers */
+INSERT INTO Publishers (PublisherName,PublisherAddress,PublisherEmail,PublisherPhone)
+    values  ('Penguin Random House LLC','New York, NY','penguin@prh.com','121-123-4567'),
+            ('Addison-Wesley Developers Library','800 E 96th St.','info@wesley.edu','233-765-4321'),
+            ('McGraw-Hill Education','New York, NY','info@mheducation.com','121-338-3987'),
+            ('Harper Collins','New York, NY','info@harpercollins.com','121-135-7911'),
+            ('Kodansha','Tokyo, Japan','info@kodansha.com','121-246-8101'),
+            ('Simon & Schuster','New York, NY','info@ss.net','121-830-2019');
+
+/* Data for table Books */
+INSERT INTO Books (GroupName, PublisherName, BookTitle, YearPublished, NumberPages)
+    values  ('Coffee House Writers Group', 'Penguin Random House LLC', 'Cold Brew', '2020', '200'),
+            ('Rockoff Writing Group', 'Addison-Wesley Developers Library', 'The Language of SQL', '2016', '224'),
+            ('The Socrates School', 'McGraw-Hill Education', 'What is Life', '401', '1'),
+            ('The Junto', 'Harper Collins', 'Divergent', '2011', '600'),
+            ('The Factory', 'Kodansha', 'Attack on Titan', '2009', '123'),
+            ('Stratford-on-Odeon', 'Simon & Schuster', 'The Institute', '2019', '576');
+
+-- drop table Books;
+-- drop table Publishers;
+-- drop table WritingGroups;
